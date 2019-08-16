@@ -1,5 +1,27 @@
-language: node_js
-node_js:
-  - "0.10"
-before_install: npm config set strict-ssl false && npm install -g grunt-cli mocha
-services: mongodb
+sudo: false
+dist: trusty
+group: edge
+
+services:
+- docker
+
+env:
+  global:
+  - TEAM_NAME: krypton
+  - QA_BRANCH: master
+  - PROJECT_NAME: mongoose-rest-endpoints
+  - AWS_DEFAULT_REGION: us-east-1
+
+before_install:
+  - openssl aes-256-cbc -K $encrypted_7dabc08677cf_key -iv $encrypted_7dabc08677cf_iv -in private.key.enc -out private.key -d
+
+script:
+  - mkdir coverage .nyc_output
+  - pip install --upgrade setuptools --user python
+  - pip install --user awscli
+  - eval "$(aws ecr get-login --no-include-email)"
+  - eval $(docker run --name bootstrap 165918379116.dkr.ecr.us-east-1.amazonaws.com/travis:latest_eks /_bootstrap/bootstrap.sh)
+
+branches:
+  only:
+  - master
