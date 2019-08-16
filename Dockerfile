@@ -19,4 +19,4 @@ RUN npm install
 RUN npm install body-parser
 RUN npm install method-override
 
-CMD npm run test
+CMD ./wait-for-it.sh mongo:27017 -- npm run test

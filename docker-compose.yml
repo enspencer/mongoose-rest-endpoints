@@ -5,11 +5,10 @@ services:
   mongo:
     image: mongo:3.4.16
     restart: always
-    expose:
-      - "27017"
+    command: --smallfiles
     ports:
       - "27017:27017"
-      
+
   mongoose-rest-endpoints-test:
     build: .
     depends_on:
