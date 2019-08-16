@@ -1,0 +1,21 @@
+version: '3.2'
+
+services:
+
+  mongo:
+    image: mongo:3.4.16
+    restart: always
+    expose:
+      - "27017"
+    ports:
+      - "27017:27017"
+      
+  mongoose-rest-endpoints-test:
+    build: .
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    environment:
+      NODE_ENV: "test"
+      MONGO_HOST: mongo

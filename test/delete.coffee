@@ -1,4 +1,6 @@
 express = require 'express'
+bodyParser = require 'body-parser'
+methodOverride = require 'method-override'
 request = require 'supertest'
 should = require 'should'
 Q = require 'q'
@@ -40,7 +42,8 @@ requirePassword = (password) ->
 			next()
 		else
 			res.send(401)
-mongoose.connect('mongodb://localhost/mre_test')
+mongoUrlCreds = if process.env.MONGO_USERNAME then "#{process.env.MONGO_USERNAME}:#{process.env.MONGO_PASSWORD}@" else ""
+mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test")
 
 
 
@@ -58,8 +61,8 @@ describe 'Delete', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 			modClass = mongoose.model('Post')
 			mod = modClass
 				date:Date.now()

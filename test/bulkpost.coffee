@@ -1,4 +1,6 @@
 express = require 'express'
+bodyParser = require 'body-parser'
+methodOverride = require 'method-override'
 request = require 'supertest'
 should = require 'should'
 Q = require 'q'
@@ -43,7 +45,8 @@ requirePassword = (password) ->
 			next()
 		else
 			res.send(401)
-mongoose.connect('mongodb://localhost/mre_test')
+mongoUrlCreds = if process.env.MONGO_USERNAME then "#{process.env.MONGO_USERNAME}:#{process.env.MONGO_PASSWORD}@" else ""
+mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test")
 
 
 
@@ -61,8 +64,8 @@ describe 'Bulk Post', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 			done()
 		afterEach (done) ->
 			# clear out
@@ -110,8 +113,8 @@ describe 'Bulk Post', ->
 				res.body[0].state.should.equal('fulfilled')
 				res.body[1].state.should.equal('rejected')
 				res.body[2].state.should.equal('rejected')
-				res.body[1].reason.message.message.should.equal('Validation failed')
-				res.body[2].reason.message.message.should.equal('Validation failed')
+				res.body[1].reason.message.message.should.equal('Post validation failed: string: Path `string` is required.')
+				res.body[2].reason.message.message.should.equal('Post validation failed: string: Path `string` is required.')
 				done()
 
 		it 'should have the first error code if they are all errors', (done) ->

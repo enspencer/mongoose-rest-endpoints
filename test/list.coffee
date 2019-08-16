@@ -1,4 +1,6 @@
 express = require 'express'
+bodyParser = require 'body-parser'
+methodOverride = require 'method-override'
 request = require 'supertest'
 should = require 'should'
 Q = require 'q'
@@ -56,7 +58,8 @@ createPost = (data) ->
 		return deferred.resolve()
 
 	return deferred.promise
-mongoose.connect('mongodb://localhost/mre_test')
+mongoUrlCreds = if process.env.MONGO_USERNAME then "#{process.env.MONGO_USERNAME}:#{process.env.MONGO_PASSWORD}@" else ""
+mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test")
 
 
 mongoose.model('Post', postSchema)
@@ -73,8 +76,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass
@@ -223,8 +226,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass
@@ -262,8 +265,8 @@ describe 'List', ->
 			
 			# set up endpoints
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 			# Create a whole bunch of posts
 			data = [
 					date:moment().add('days', 26).toDate()
@@ -332,8 +335,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass
@@ -364,8 +367,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass

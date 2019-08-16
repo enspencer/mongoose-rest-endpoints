@@ -30,7 +30,11 @@ module.exports = function(grunt) {
 	grunt.registerTask('dropTestDb', function() {
 		var mongoose = require('mongoose');
 		var done = this.async();
-		mongoose.connect('mongodb://localhost/mre_test')
+		var mongoUrlCreds = process.env.MONGO_USERNAME 
+			? (process.env.MONGO_USERNAME+":"+process.env.MONGO_PASSWORD+"@") 
+			: "";
+		var mongoUrl = "mongodb://" + mongoUrlCreds + process.env.MONGO_HOST;
+		mongoose.connect(mongoUrl+"/mre_test")
 		mongoose.connection.on('open', function () { 
 			mongoose.connection.db.dropDatabase(function(err) {
 				if(err) {
