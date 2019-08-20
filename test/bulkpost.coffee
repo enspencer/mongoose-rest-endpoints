@@ -118,8 +118,8 @@ describe 'Bulk Post', ->
 				res.body[0].state.should.equal('fulfilled')
 				res.body[1].state.should.equal('rejected')
 				res.body[2].state.should.equal('rejected')
-				res.body[1].reason.message.message.should.equal('Post validation failed')
-				res.body[2].reason.message.message.should.equal('Post validation failed')
+				res.body[1].reason.message.message.should.equal('Post validation failed: string: Path `string` is required.')
+				res.body[2].reason.message.message.should.equal('Post validation failed: string: Path `string` is required.')
 				done()
 
 		it 'should have the first error code if they are all errors', (done) ->
