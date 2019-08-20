@@ -64,7 +64,8 @@ describe 'Post', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', mongoose.model('Post'))
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 			done()
 		afterEach (done) ->

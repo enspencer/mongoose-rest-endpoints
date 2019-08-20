@@ -76,7 +76,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
@@ -226,7 +227,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
@@ -265,7 +267,8 @@ describe 'List', ->
 			
 			# set up endpoints
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 			# Create a whole bunch of posts
 			data = [
@@ -335,7 +338,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
@@ -367,7 +371,8 @@ describe 'List', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')

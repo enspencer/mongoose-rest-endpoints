@@ -8,7 +8,6 @@ var fs = require('fs');
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-exec');
-	grunt.loadNpmTasks('grunt-sed');
 	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.initConfig({
 		version: grunt.file.readJSON('package.json').version,
@@ -21,7 +20,7 @@ module.exports = function(grunt) {
 		exec:{
 			test: {
 				cmd:function(ex) {
-					return f('NODE_ENV=test mocha --compilers coffee:coffee-script/register %s', ex)
+					return f('NODE_ENV=test mocha --require coffee-script/register %s', ex)
 				}
 			}
 		}
@@ -59,16 +58,17 @@ module.exports = function(grunt) {
 				var file;
 				for(var i=0;i<files.length;i++) {
 					file = files[i];
-						tasks.push('exec:test:"test/' + file + '"')
+					tasks.push('exec:test:"test/' + file + '"')
 				}
-
-				console.log(tasks);
 				//tasks = ['exec:test:"test/unit/*.js"']
 				break;
 			default:
 				tasks = ['dropTestDb', 'exec:test:"test/' + type + '.coffee"', 'dropTestDb']
 				break;
 		}
+
+		console.log(tasks);
+
 		grunt.task.run(tasks);
 	});
 };

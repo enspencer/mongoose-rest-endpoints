@@ -43,7 +43,7 @@ requirePassword = (password) ->
 		else
 			res.send(401)
 mongoUrlCreds = if process.env.MONGO_USERNAME then "#{process.env.MONGO_USERNAME}:#{process.env.MONGO_PASSWORD}@" else ""
-mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test")
+mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test", { useMongoClient: true })
 
 
 
@@ -61,7 +61,8 @@ describe 'Delete', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(bodyParser())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
 			@app.use(methodOverride())
 			modClass = mongoose.model('Post')
 			mod = modClass

@@ -14,9 +14,9 @@ WORKDIR /var/www/edi/
 COPY . .
 
 RUN npm install -g grunt-cli
-RUN npm install -g mocha@^5.2.0
 RUN npm install
-RUN npm install body-parser
-RUN npm install method-override
+RUN npm install mocha --save-dev
+RUN npm install body-parser --save-dev
+RUN npm install method-override --save-dev
 
 CMD ./wait-for-it.sh mongo:27017 -- npm run test

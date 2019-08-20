@@ -17,4 +17,4 @@ install:
   - docker-compose build
 
 script:
-  - docker-compose up
+  - docker-compose run mongoose-rest-endpoints-test
