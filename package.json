@@ -16,15 +16,15 @@
     "API"
   ],
   "dependencies": {
-    "coffee-script": "^1.8.0",
-    "colors": "^0.6.2",
+    "coffee-script": "~1.8.0",
+    "colors": "~0.6.2",
     "dot-component": "~0.1.0",
-    "express": "^4.15.2",
+    "express": "~4.15.2",
     "hooks": "~0.3.2",
-    "minimatch": "^1.0.0",
+    "minimatch": "~1.0.0",
     "moment": "~2.6.0",
-    "mongoose": "^4.9.1",
-    "q": "^1.5.0",
+    "mongoose": "~4.9.1",
+    "q": "~1.5.0",
     "underscore": "~1.5.2"
   },
   "author": {

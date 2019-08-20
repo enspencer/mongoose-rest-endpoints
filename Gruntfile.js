@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		exec:{
 			test: {
 				cmd:function(ex) {
-					return f('NODE_ENV=test mocha --require coffee-script/register %s', ex)
+					return f('NODE_ENV=test mocha --exit --require coffee-script/register %s', ex)
 				}
 			}
 		}
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('test', 'Run tests', function(type) {
-		var tasks = ['dropTestDb']
+		var tasks = ['dropTestDb'];
 		if(type === undefined) {
 			type = 'all';
 		}
