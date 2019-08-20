@@ -38,12 +38,15 @@
   "homepage": "https://github.com/jraede/mongoose-rest-endpoints",
   "readme": "README.md",
   "devDependencies": {
-    "supertest": "~0.8.2",
-    "should": "~2.1.1",
+    "body-parser": "^1.19.0",
     "grunt": "~0.4.2",
     "grunt-contrib-coffee": "~0.8.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-exec": "~0.4.3",
-    "semver": "~2.2.1"
+    "method-override": "^3.0.0",
+    "mocha": "^2.5.3",
+    "semver": "~2.2.1",
+    "should": "~2.1.1",
+    "supertest": "~0.8.2"
   }
 }

@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 		exec:{
 			test: {
 				cmd:function(ex) {
-					return f('NODE_ENV=test mocha --exit --require coffee-script/register %s', ex)
+					return f('NODE_ENV=test mocha --compilers coffee:coffee-script/register %s', ex)
 				}
 			}
 		}

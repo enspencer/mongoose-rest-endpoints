@@ -203,7 +203,7 @@ describe 'Fetch', ->
 
 			mod._comments = [comment._id]
 			@mod = mod
-			Q.all([mod.saveQ(), comment.saveQ()]).then ->
+			Q.all([mod.save(), comment.save()]).then ->
 				done()
 			.fail(done).done()
 		afterEach (done) -> 
