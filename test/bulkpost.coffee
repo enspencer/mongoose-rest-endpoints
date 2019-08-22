@@ -1,4 +1,6 @@
 express = require 'express'
+bodyParser = require 'body-parser'
+methodOverride = require 'method-override'
 request = require 'supertest'
 should = require 'should'
 Q = require 'q'
@@ -43,31 +45,38 @@ requirePassword = (password) ->
 			next()
 		else
 			res.send(401)
-mongoose.connect('mongodb://localhost/mre_test')
-
-
-
-mongoose.model('Post', postSchema)
-mongoose.model('Comment', commentSchema)
-mongoose.model('Author', authorSchema)
-
-mongoose.set 'debug', true
-
-
 
 describe 'Bulk Post', ->
-	@timeout(5000)
+	before ->
+		mongoUrlCreds = if process.env.MONGO_USERNAME then "#{process.env.MONGO_USERNAME}:#{process.env.MONGO_PASSWORD}@" else ""
+		mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test", { useMongoClient: true })
+		mongoose.model('Post', postSchema)
+		mongoose.model('Comment', commentSchema)
+		mongoose.model('Author', authorSchema)
+		mongoose.set 'debug', true
+
+	after (done) ->
+		mongoose.connection.db.dropDatabase (err) ->
+			if err
+				console.log err
+			else
+				console.log 'Successfully dropped db'
+			mongoose.connection.close()
+			done()
+
+	@timeout(10000)
 	describe 'Basic object', ->
-		beforeEach (done) ->
+		beforeEach ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
-			done()
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
+			@app.use(methodOverride())
+
 		afterEach (done) ->
-			# clear out
-			mongoose.connection.collections.posts.drop()
-			done()
+			mongoose.connection.collections.posts.drop (err, result) ->
+				done()
+			
 		it 'should let you bulk post with no hooks', (done) ->
 
 			@endpoint.allowBulkPost().register(@app)
@@ -81,7 +90,6 @@ describe 'Bulk Post', ->
 					number:8
 					string:'Foo'
 			]
-				
 
 			request(@app).post('/api/posts/bulk').send(data).end (err, res) ->
 				res.status.should.equal(201)
@@ -110,8 +118,8 @@ describe 'Bulk Post', ->
 				res.body[0].state.should.equal('fulfilled')
 				res.body[1].state.should.equal('rejected')
 				res.body[2].state.should.equal('rejected')
-				res.body[1].reason.message.message.should.equal('Validation failed')
-				res.body[2].reason.message.message.should.equal('Validation failed')
+				res.body[1].reason.message.message.should.equal('Post validation failed: string: Path `string` is required.')
+				res.body[2].reason.message.message.should.equal('Post validation failed: string: Path `string` is required.')
 				done()
 
 		it 'should have the first error code if they are all errors', (done) ->
@@ -133,5 +141,3 @@ describe 'Bulk Post', ->
 				
 				res.status.should.equal(400)
 				done()
-
-		

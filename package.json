@@ -16,15 +16,15 @@
     "API"
   ],
   "dependencies": {
-    "coffee-script": "^1.8.0",
-    "colors": "^0.6.2",
+    "coffee-script": "~1.8.0",
+    "colors": "~0.6.2",
     "dot-component": "~0.1.0",
-    "express": "^4.15.2",
+    "express": "~4.15.2",
     "hooks": "~0.3.2",
-    "minimatch": "^1.0.0",
+    "minimatch": "~1.0.0",
     "moment": "~2.6.0",
-    "mongoose": "^4.9.1",
-    "q": "^1.5.0",
+    "mongoose": "~5.6.9",
+    "q": "~1.5.0",
     "underscore": "~1.5.2"
   },
   "author": {
@@ -38,13 +38,15 @@
   "homepage": "https://github.com/jraede/mongoose-rest-endpoints",
   "readme": "README.md",
   "devDependencies": {
-    "supertest": "~0.8.2",
-    "should": "~2.1.1",
+    "body-parser": "^1.19.0",
     "grunt": "~0.4.2",
     "grunt-contrib-coffee": "~0.8.0",
     "grunt-contrib-watch": "~0.5.3",
     "grunt-exec": "~0.4.3",
-    "grunt-sed": "~0.1.1",
-    "semver": "~2.2.1"
+    "method-override": "^3.0.0",
+    "mocha": "^2.5.3",
+    "semver": "~2.2.1",
+    "should": "~2.1.1",
+    "supertest": "~0.8.2"
   }
 }

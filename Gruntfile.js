@@ -8,7 +8,6 @@ var fs = require('fs');
 module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-watch');
 	grunt.loadNpmTasks('grunt-exec');
-	grunt.loadNpmTasks('grunt-sed');
 	grunt.loadNpmTasks('grunt-contrib-coffee');
 	grunt.initConfig({
 		version: grunt.file.readJSON('package.json').version,
@@ -30,7 +29,11 @@ module.exports = function(grunt) {
 	grunt.registerTask('dropTestDb', function() {
 		var mongoose = require('mongoose');
 		var done = this.async();
-		mongoose.connect('mongodb://localhost/mre_test')
+		var mongoUrlCreds = process.env.MONGO_USERNAME 
+			? (process.env.MONGO_USERNAME+":"+process.env.MONGO_PASSWORD+"@") 
+			: "";
+		var mongoUrl = "mongodb://" + mongoUrlCreds + process.env.MONGO_HOST;
+		mongoose.connect(mongoUrl+"/mre_test")
 		mongoose.connection.on('open', function () { 
 			mongoose.connection.db.dropDatabase(function(err) {
 				if(err) {
@@ -44,7 +47,7 @@ module.exports = function(grunt) {
 	});
 
 	grunt.registerTask('test', 'Run tests', function(type) {
-		var tasks = ['dropTestDb']
+		var tasks = ['dropTestDb'];
 		if(type === undefined) {
 			type = 'all';
 		}
@@ -55,16 +58,17 @@ module.exports = function(grunt) {
 				var file;
 				for(var i=0;i<files.length;i++) {
 					file = files[i];
-						tasks.push('exec:test:"test/' + file + '"')
+					tasks.push('exec:test:"test/' + file + '"')
 				}
-
-				console.log(tasks);
 				//tasks = ['exec:test:"test/unit/*.js"']
 				break;
 			default:
 				tasks = ['dropTestDb', 'exec:test:"test/' + type + '.coffee"', 'dropTestDb']
 				break;
 		}
+
+		console.log(tasks);
+
 		grunt.task.run(tasks);
 	});
 };

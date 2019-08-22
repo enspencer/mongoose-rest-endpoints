@@ -1,4 +1,6 @@
 express = require 'express'
+bodyParser = require 'body-parser'
+methodOverride = require 'method-override'
 request = require 'supertest'
 should = require 'should'
 Q = require 'q'
@@ -45,7 +47,8 @@ requirePassword = (password) ->
 			next()
 		else
 			res.send(401)
-mongoose.connect('mongodb://localhost/mre_test')
+mongoUrlCreds = if process.env.MONGO_USERNAME then "#{process.env.MONGO_USERNAME}:#{process.env.MONGO_PASSWORD}@" else ""
+mongoose.connect("mongodb://#{mongoUrlCreds}#{process.env.MONGO_HOST}/mre_test")
 
 
 
@@ -63,8 +66,9 @@ describe 'Fetch', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass
@@ -138,8 +142,9 @@ describe 'Fetch', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass
@@ -182,8 +187,9 @@ describe 'Fetch', ->
 		beforeEach (done) ->
 			@endpoint = new mre('/api/posts', 'Post')
 			@app = express()
-			@app.use(express.bodyParser())
-			@app.use(express.methodOverride())
+			@app.use(bodyParser.urlencoded({extended: true}))
+			@app.use(bodyParser.json())
+			@app.use(methodOverride())
 
 			modClass = mongoose.model('Post')
 			mod = modClass
@@ -197,7 +203,7 @@ describe 'Fetch', ->
 
 			mod._comments = [comment._id]
 			@mod = mod
-			Q.all([mod.saveQ(), comment.saveQ()]).then ->
+			Q.all([mod.save(), comment.save()]).then ->
 				done()
 			.fail(done).done()
 		afterEach (done) -> 

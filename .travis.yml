@@ -1,5 +1,20 @@
-language: node_js
-node_js:
-  - "0.10"
-before_install: npm config set strict-ssl false && npm install -g grunt-cli mocha
-services: mongodb
+sudo: false
+dist: trusty
+
+branches:
+  only:
+    - master
+
+services:
+  - docker
+
+env:
+  global:
+    - TEAM_NAME: krypton
+    - AWS_DEFAULT_REGION: 'us-east-1'
+
+install:
+  - docker-compose build
+
+script:
+  - docker-compose run mongoose-rest-endpoints-test
